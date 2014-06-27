@@ -44,19 +44,21 @@ public class MainActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
+	    private static String UM_COUNT = "UM_COUNT";
+
 	    private int mUmCount = 0;
 
-	    private void initUi() {
+	    private void syncUmCount() {
+		    ((TextView) getView().findViewById(R.id.umCount)).setText(String.format("%d", mUmCount));
+	    }
+
+	    private void setButtonHandler() {
 		    getView().findViewById(R.id.moreButton).setOnClickListener(new View.OnClickListener() {
 			    @Override
 			    public void onClick(final View view) {
 				    incrementUms();
 			    }
 		    });
-	    }
-
-	    private void zeroUms() {
-		    mUmCount = 0;
 	    }
 
 	    private void incrementUms() {
@@ -67,18 +69,10 @@ public class MainActivity extends Activity {
         }
 
 	    @Override
-	    public void onStart() {
-		    super.onStart();
+	    public void onCreate(final Bundle savedInstanceState) {
+		    super.onCreate(savedInstanceState);
 
-		    initUi();
-		    zeroUms();
-	    }
-
-	    @Override
-	    public void onDetach() {
-		    super.onDetach();
-
-		    zeroUms();
+		    mUmCount = (savedInstanceState == null ? 0 : savedInstanceState.getInt(UM_COUNT, 0));
 	    }
 
 	    @Override
@@ -87,5 +81,20 @@ public class MainActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
         }
+
+	    @Override
+	    public void onStart() {
+		    super.onStart();
+
+		    setButtonHandler();
+		    syncUmCount();
+	    }
+
+	    @Override
+	    public void onSaveInstanceState(final Bundle outState) {
+		    super.onSaveInstanceState(outState);
+
+		    outState.putInt(UM_COUNT, mUmCount);
+	    }
     }
 }
