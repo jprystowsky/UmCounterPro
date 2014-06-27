@@ -75,13 +75,6 @@ public class MainActivity extends Activity {
 	    }
 
 	    @Override
-	    public void onAttach(final Activity activity) {
-		    super.onAttach(activity);
-
-
-	    }
-
-	    @Override
 	    public void onDetach() {
 		    super.onDetach();
 
